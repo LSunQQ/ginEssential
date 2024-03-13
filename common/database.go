@@ -3,6 +3,7 @@ package common
 import (
 	"fmt"
 	"ginEssential/lxz/model"
+	"net/url"
 
 	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
@@ -19,13 +20,15 @@ func InitDB() *gorm.DB {
 	username := viper.GetString("datasource.username")
 	password := viper.GetString("datasource.password")
 	charset := viper.GetString("datasource.charset")
-	args := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s&parseTime=True&loc=Local",
+	loc := viper.GetString("datasource.loc")
+	args := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s&parseTime=True&loc=%s",
 		username,
 		password,
 		host,
 		port,
 		database,
-		charset)
+		charset,
+		url.QueryEscape(loc))
 
 	db, err := gorm.Open(mysql.New(mysql.Config{
 		DriverName: driverName,
