@@ -2,8 +2,9 @@ package common
 
 import (
 	"fmt"
-	"ginEssential/model"
+	"ginEssential/lxz/model"
 
+	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -11,13 +12,13 @@ import (
 var DB *gorm.DB
 
 func InitDB() *gorm.DB {
-	driverName := "mysql"
-	host := "localhost"
-	port := "3306"
-	database := "ginessential"
-	username := "root"
-	password := "12345678"
-	charset := "utf8"
+	driverName := viper.GetString("datasource.driverName")
+	host := viper.GetString("datasource.host")
+	port := viper.GetString("datasource.port")
+	database := viper.GetString("datasource.database")
+	username := viper.GetString("datasource.username")
+	password := viper.GetString("datasource.password")
+	charset := viper.GetString("datasource.charset")
 	args := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s&parseTime=True&loc=Local",
 		username,
 		password,

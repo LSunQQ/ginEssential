@@ -1,7 +1,8 @@
 package common
 
 import (
-	"ginEssential/model"
+	"fmt"
+	"ginEssential/lxz/model"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -42,6 +43,8 @@ func ParseToken(tokenString string) (*jwt.Token, *Claims, error) {
 	token, err := jwt.ParseWithClaims(tokenString, claims, func(t *jwt.Token) (interface{}, error) {
 		return jwtKey, nil
 	})
+
+	fmt.Println("parseToken: ", token)
 
 	return token, claims, err
 }
