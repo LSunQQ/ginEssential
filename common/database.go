@@ -5,9 +5,9 @@ import (
 	"ginEssential/lxz/model"
 	"net/url"
 
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/jinzhu/gorm"
 	"github.com/spf13/viper"
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
 )
 
 var DB *gorm.DB
@@ -30,10 +30,12 @@ func InitDB() *gorm.DB {
 		charset,
 		url.QueryEscape(loc))
 
-	db, err := gorm.Open(mysql.New(mysql.Config{
-		DriverName: driverName,
-		DSN:        args, // data source name, 详情参考：https://github.com/go-sql-driver/mysql#dsn-data-source-name
-	}), &gorm.Config{})
+	fmt.Println(args)
+	db, err := gorm.Open(driverName, args)
+	// db, err := gorm.Open(mysql.New(mysql.Config{
+	// 	DriverName: driverName,
+	// 	DSN:        args, // data source name, 详情参考：https://github.com/go-sql-driver/mysql#dsn-data-source-name
+	// }), &gorm.Config{})
 
 	// db, err := gorm.Open(driverName, args)
 	if err != nil {
@@ -43,7 +45,6 @@ func InitDB() *gorm.DB {
 	db.AutoMigrate(&model.User{})
 
 	DB = db
-
 	return db
 }
 

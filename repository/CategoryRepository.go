@@ -4,7 +4,7 @@ import (
 	"ginEssential/lxz/common"
 	"ginEssential/lxz/model"
 
-	"gorm.io/gorm"
+	"github.com/jinzhu/gorm"
 )
 
 type CategoryRepository struct {

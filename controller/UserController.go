@@ -1,20 +1,35 @@
 package controller
 
 import (
+	"bytes"
+	"fmt"
 	"ginEssential/lxz/common"
 	"ginEssential/lxz/dto"
 	"ginEssential/lxz/model"
 	"ginEssential/lxz/response"
 	"ginEssential/lxz/util"
+	"io"
 	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/gorm"
 	"golang.org/x/crypto/bcrypt"
-	"gorm.io/gorm"
 )
 
 func Register(ctx *gin.Context) {
+
+	if ctx.Request.Method == http.MethodPut || ctx.Request.Method == http.MethodPost {
+		data, err := io.ReadAll(ctx.Request.Body)
+		if err != nil {
+			fmt.Printf("read request body failed,err = %s.", err)
+			return
+		}
+		fmt.Printf("request body = %s.\n", string(data))
+		ctx.Request.Body = io.NopCloser(bytes.NewBuffer(data))
+	}
+	ctx.Next()
+
 	DB := common.GetDB()
 	// // 使用map 获取请求的参数
 	// var requestMap = make(map[string]string)
@@ -22,6 +37,11 @@ func Register(ctx *gin.Context) {
 
 	var requestUser = model.User{}
 	// json.NewDecoder(ctx.Request.Body).Decode(&requestUser)
+
+	// if err := ctx.ShouldBind(&requestUser); err != nil {
+	// 	response.Fail(ctx, nil, "数据验证错误，分类名称必填")
+	// 	return
+	// }
 	ctx.Bind(&requestUser)
 
 	// 获取参数

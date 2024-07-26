@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"ginEssential/lxz/common"
-	"log"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -13,13 +12,7 @@ import (
 func main() {
 	InitConfig()
 	db := common.InitDB()
-	defer func() {
-		sqlDB, err := db.DB()
-		if err != nil {
-			log.Println("sql close err" + err.Error())
-		}
-		sqlDB.Close()
-	}()
+	defer db.Close()
 
 	r := gin.Default()
 	r = CollectRoute(r)
